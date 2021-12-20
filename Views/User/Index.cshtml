@@ -1,0 +1,100 @@
+﻿@model List<CRUD.Models.User>
+@{
+    var data = TempData["Data"] as User;
+}
+<section class="section dashboard">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Users</h1>
+                <form id="dataForm" class="needs-validation" asp-action="@(TempData["Update"] != null && (bool)TempData["Update"] == true ? "Update" : "Create")" asp-controller="User" method="post" novalidate>
+                    <input type="hidden" id="idUser" name="idUser" value="@(data != null ? data.Id : "")">
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <label class="form-label"><strong>Name</strong></label>
+                            <input type="text" class="form-control" id="Name" name="Name" value="@(data != null ? data.Name : "")" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><strong>Email</strong></label>
+                            <input type="text" class="form-control" id="Email" name="Email" value="@(data != null ? data.Email : "")" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><strong>Age</strong></label>
+                            <input type="text" class="form-control" id="Age" name="Age" value="@(data != null ? data.Age : "")" required>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="col-md-12 div-btn-menu">
+                        <button type="submit" class="btn btn-success mb-1 btn-actions"><i class="fas fa-save"></i> Save</button>
+                        @*<button type="submit" class="hiddenElement"  id="submitForm"></button>*@
+                    </div>
+                </form>
+                <br>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Age </th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Name
+                                        </td>
+                                        <td>
+                                            @item.Age
+                                        </td>
+                                        <td>
+                                            @item.Email
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-primary mb-1 btn-actions" asp-action="Index" asp-controller="User" asp-route-idUser="@item.Id">
+                                                Edit
+                                            </a>
+                                            <a class="btn btn-danger mb-1 btn-actions" asp-action="Delete" asp-controller="User" asp-route-id="@item.Id">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="alert alert-primary align-items-center div-alert-table" role="alert">
+                                            <div>
+                                                <h5 class="info-table">No hay registros</h5>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <div class="row div-with">
+                    <div class="col-md-12 div-pagination">
+                        <ul id="pagination" class="pagination"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<input type="hidden" id="success" value="@(TempData["Success"] != null ? TempData["Success"] : "empty")">
+<input type="hidden" id="error" value="@(TempData["Error"] != null ? TempData["Error"] : "empty")">
+
+@section scripts{
+    <script src="~/js/users.js"></script>
+    <script src="~/js/validation.js"></script>
+}
